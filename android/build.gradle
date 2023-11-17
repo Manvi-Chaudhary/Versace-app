@@ -1,0 +1,48 @@
+buildscript {
+    ext.kotlin_version = '1.8.20'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.google.firebase:firebase-bom:32.6.0"
+
+        // When using the BoM, you don't specify versions in Firebase library dependencies
+
+        // Add the dependency for the Firebase SDK for Google Analytics
+        //classpath "com.google.firebase:firebase-analytics"
+
+
+    }
+}
+/*plugins {
+    id("com.android.application") version "7.3.0" apply false
+    // ...
+
+    // Add the dependency for the Google services Gradle plugin
+    id("com.google.gms.google-services") version "4.4.0" apply false
+}*/
+
+
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

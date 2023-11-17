@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "216493400994",
+    "project_id": "versace-app-614f6",
+    "storage_bucket": "versace-app-614f6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216493400994:android:427055c1623d779b6ec8fb",
+        "android_client_info": {
+          "package_name": "com.manvi.versace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDV4zKh-MsrUi7YowLZRiRG9PySxYuoQbQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
