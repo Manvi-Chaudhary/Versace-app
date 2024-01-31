@@ -1,11 +1,16 @@
+import 'dart:js_interop';
+
 import 'package:app/Homepage/Items.dart';
+import 'package:app/Providers/FavouriteCubit.dart';
 import 'package:app/Providers/wishlist_provider.dart';
+import 'package:app/services/Authentication.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import "package:provider/provider.dart";
 import 'package:app/services/Database.dart';
 import "Wishlist.dart";
@@ -17,22 +22,59 @@ class Shop extends StatefulWidget {
   final int price;
   final String productID;
 
+  final String user;
+
   const Shop({
     Key? key,
     required this.image,
     required this.name,
     required this.price,
     required this.productID,
+    required this.user
   }) : super(key: key);
   _ShopState createState() => _ShopState();
 }
 
 class _ShopState extends State<Shop> {
+  late final col;
+
+  int i=0;
+
+
+  void initState(){
+  col=BlocProvider.of<FavouriteCubit>(context);
+  switch (widget.name){
+  case "Sneakers" :
+  i=0;
+  break;
+  case "T-shirts" :
+  i=1;
+  break;
+  case "Bags":
+  i=2;
+  break;
+  case "Heels" :
+  i=3;
+  break;
+  case "Jackets" :
+  i=4;
+  break;
+  case "Sunglasses" :
+  i=5;
+  break;
+  }
+  Dataservice(uid: widget.user).isAlreadyPresent(widget.productID).then((value) {
+  if(value==1){
+  print("val "+ value.toString());
+  col.add(i);
+  }
+  });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<String?>(context);
 
-    var index = null;
+
     return Scaffold(
         appBar: AppBar(
             elevation: 0,
@@ -51,38 +93,41 @@ class _ShopState extends State<Shop> {
                   color: Colors.black,
                 )),
             actions: [
-              IconButton(
-                  icon: (index != null)
-                      ? Icon(
-                    CupertinoIcons.heart_fill,
-                    color: Colors.red,
-                  )
-                      : Icon(CupertinoIcons.suit_heart,
-                      color: Colors.black),
-                  onPressed: () async {
-    Dataservice(uid: user!).wishlist(
-    widget.productID,
-    widget.image,
-    widget.name,
-    widget.price);
-    print("added");
-    const snackBar2=SnackBar(content: Text("Added to Wishlist",style: TextStyle(color: Colors.white),),backgroundColor: Colors.green);
-    ScaffoldMessenger.of(context).showSnackBar(snackBar2);
-                    /*if (index != null) {
-                      await Dataservice(uid: user!)
-                          .removewish(widget.productID);
-                      print("removed");
-                    } else {
-                      Dataservice(uid: user!).wishlist(
-                          widget.productID,
-                          widget.image,
-                          widget.name,
-                          widget.price);
-                      print("added");
-                      setState(() {});*/
-                    }
-                  ),
-            ]),
+               BlocBuilder<FavouriteCubit,List<int>>(
+                 builder: (context,val) {
+                   return IconButton(
+                          icon: (val[i]==1)
+                              ? Icon(
+                            CupertinoIcons.heart_fill,
+                            color: Colors.red,
+                          )
+                              : Icon(CupertinoIcons.suit_heart,
+                              color: Colors.black),
+                          onPressed: () async {
+
+                            if(val[i]==0){
+                   Dataservice(uid: widget.user).wishlist(
+                   widget.productID,
+                   widget.image,
+                   widget.name,
+                   widget.price);
+                   print("added");
+                   const snackBar2=SnackBar(content: Text("Added to Wishlist",style: TextStyle(color: Colors.white),),backgroundColor: Colors.green);
+                   ScaffoldMessenger.of(context).showSnackBar(snackBar2);
+                   col.add(i);
+
+
+                   }
+                            else{
+                              Dataservice(uid: widget.user).removewish(widget.productID);
+                              const snackBar2=SnackBar(content: Text("Removed from Wishlist",style: TextStyle(color: Colors.white),),backgroundColor: Colors.green);
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar2);
+                              col.remove(i);
+                   }
+
+
+                 }
+               );})]),
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10),
@@ -192,7 +237,7 @@ class _ShopState extends State<Shop> {
         bottomNavigationBar: Material(
           child: TextButton(
               onPressed: () async {
-                await Dataservice(uid: user!).cart(widget.productID,
+                await Dataservice(uid: widget.user).cart(widget.productID,
                     widget.image, widget.name, widget.price, 28);
                 print("added to cart");
                 const snackBar2=SnackBar(content: Text("Added to Cart",style: TextStyle(color: Colors.white),),backgroundColor: Colors.green);

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:app/services/Authentication.dart';
 import 'Items.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import "package:provider/provider.dart";
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -12,6 +13,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
+    final user=Provider.of<String>(context);
     List<String> image = [
       "sneakers.PNG",
       "t-shirts.PNG",
@@ -107,7 +109,7 @@ class _HomepageState extends State<Homepage> {
                     scrollDirection: Axis.horizontal,
                     separatorBuilder: (context, index) => SizedBox(width: 10),
                     itemBuilder: (context, index) =>
-                        CircleItem(image: image[index], name: name[index],price: price[index],productID: productID[index],)),
+                        CircleItem(image: image[index], name: name[index],price: price[index],productID: productID[index],user : user)),
               ),
               SizedBox(height: 10),
               Text("SHOP THE COLLECTION /",
@@ -129,6 +131,7 @@ class _HomepageState extends State<Homepage> {
                           name: name[index],
                           price: price[index],
                           productID: productID[index],
+                      user : user,
                         )),
               )
             ],

@@ -59,17 +59,21 @@ class Dataservice {
     return await record.doc(uid).collection("Cart").doc(id).delete();
   }
 
-  Future<String?> isAlreadyPresent(String productID) async {
-    QuerySnapshot s = await record
-        .doc(uid)
-        .collection("Wishlist")
-        .where("ProductID", isEqualTo: productID)
-        .get();
-    print(s.docs.first);
-    if (s.docs.isEmpty) {
+  Future isAlreadyPresent(String productID) async {
+    try{
+      QuerySnapshot s = await record
+          .doc(uid)
+          .collection("Wishlist")
+          .where("ProductID", isEqualTo: productID)
+          .get();
+      return s.size;
+
+    }
+    catch(e){
       return null;
     }
-    return "YES";
+
+
   }
 
   Stream<QuerySnapshot> get wish {

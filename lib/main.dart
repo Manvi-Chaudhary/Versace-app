@@ -1,7 +1,9 @@
+import 'package:app/Providers/FavouriteCubit.dart';
 import 'package:app/Providers/wishlist_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'Wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'services/Authentication.dart';
@@ -44,7 +46,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           StreamProvider.value(value: Authservice().user, initialData: null),
-          ChangeNotifierProvider(create: (_) => WishlistProvider())
+          ChangeNotifierProvider(create: (_) => WishlistProvider()),
+          BlocProvider(create: (_)=>FavouriteCubit())
         ],
         child: MaterialApp(
           // Application name
