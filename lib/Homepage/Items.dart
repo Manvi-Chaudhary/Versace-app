@@ -7,7 +7,9 @@ class CircleItem extends StatelessWidget {
   String image;
   int price;
   String productID;
-  CircleItem({Key? key, required this.image, required this.name,required this.price,required this.productID})
+
+  String user;
+  CircleItem({Key? key, required this.image, required this.name,required this.price,required this.productID,required this.user})
       : super(key: key);
   @override
   Widget build(context) {
@@ -31,6 +33,7 @@ class CircleItem extends StatelessWidget {
                             name: name,
                             price: price,
                             productID: productID,
+                            user : user
                           )));
                   print(name + " Pressed");
                 },
@@ -54,6 +57,7 @@ class SquareItem extends StatelessWidget {
   String name;
   int price;
   String productID;
+  String user;
 
   SquareItem({
     Key? key,
@@ -61,6 +65,7 @@ class SquareItem extends StatelessWidget {
     required this.name,
     required this.price,
     required this.productID,
+    required this.user
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -84,6 +89,7 @@ class SquareItem extends StatelessWidget {
                                 name: name,
                                 price: price,
                                 productID: productID,
+                            user : user
                               )));
                   print(name + " Pressed");
                 },
